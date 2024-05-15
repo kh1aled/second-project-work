@@ -1,6 +1,7 @@
-        //====== VARIABLES =======
+//====== VARIABLES =======
 const popupModal = document.querySelector(".popup");
 const popupOverlay = document.querySelector(".pop-overlay");
+const pausedOverlay = document.querySelector(".pause-overlay");
 const game = document.querySelector(".game");
 const playButton = document.querySelector(".game .homepage .play");
 const homepage = document.querySelector(".game .homepage");
@@ -15,7 +16,11 @@ const arrows = document.querySelectorAll(".game .body .arrow");
 const pauseButton = document.querySelector(".game .pause.icon");
 
 const iconsArr = [...arrows, pauseButton];
+
 let animationCounter = 0,
+  isRunning = false,
+  theTimer = 0,
+  timerInterval,
   counter = 0,
   textCounter = 0,
   wrongAnswers = 0,
@@ -35,12 +40,9 @@ infoIcon.addEventListener("click", () => {
   animateInfo();
 });
 
-
-
 playButton.addEventListener("click", () => {
-  //openFullscreen();
+  openFullscreen();
   document.querySelector("#start-audio").play();
-  //stopWatch();
   game.style.backgroundImage = "url(./media/images/bg2.png)";
   homepage.classList.add("hide");
   homepage.addEventListener("animationend", () => {
@@ -51,28 +53,39 @@ playButton.addEventListener("click", () => {
     body.classList.add("show");
     pauseButton.style.visibility = "visible";
     cardItems[questionsShow].classList.add("show");
+    if (!isRunning) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
   });
 });
-
 pauseButton.addEventListener("click", () => {
   const hiddenIcon = pauseButton.querySelector("i.hide");
   const shownIcon = pauseButton.querySelector("i:not(.hide)");
   hiddenIcon.classList.remove("hide");
   shownIcon.classList.add("hide");
+  pausedOverlay.classList.toggle("hide");
+  if (isRunning) {
+    stopTimer();
+  } else {
+    startTimer();
+  }
 });
-
 cardsText.forEach((card) => {
-  card.addEventListener("click", function () {
-    //SHOW THE NEXT QUESTION
-   
+  card.addEventListener("click", (e) => {
     //CHECK ANSWERS
-    var question_by_id =  document.getElementById(`q_${this.dataset.id}`)
+    var question_by_id = document.getElementById(
+      `q_${e.target.dataset.number}`
+    );
 
     //IF ANSWER IS TRUE
     if (card.dataset.status === "true") {
-       question_by_id.classList.add("true");
+      question_by_id.classList.add("true");
       document.querySelector("#start-audio").play();
-      counter += 1;
+      console.log(counter);
+      counter++;
+      console.log(counter);
       document.querySelector(
         ".score"
       ).textContent = `${counter}/${cardItems.length}`;
@@ -86,6 +99,7 @@ cardsText.forEach((card) => {
       question_by_id.classList.add("false");
       wrongAnswers++;
     }
+    //SHOW THE NEXT QUESTION
     questionsShow++;
     if (questionsShow === cardItems.length) {
       const text = document.querySelector(".text-card .score-text");
@@ -93,6 +107,7 @@ cardsText.forEach((card) => {
       text.setAttribute("text", `${counter}/${cardsText.length}`);
 
       setTimeout(() => {
+        clearInterval(timerInterval);
         successModal.style.visibility = "visible";
         successModal.classList.add("show");
         overlay.classList.add("show");
@@ -103,10 +118,8 @@ cardsText.forEach((card) => {
         animateNextQuestion();
       }, 500);
     }
-   
   });
 });
-
 
 const hideItems = () => {
   iconsArr.forEach((item) => {
@@ -165,15 +178,6 @@ window.addEventListener("orientationchange", function () {
   }
 });
 
-// function stopWatch() {
-//   const time = setInterval(() => {
-//     theTimer++;
-
-//     clearInterval(time)
-//     statusTime = false;
-//   }, 1000);
-// }
-
 var elem = document.body;
 function openFullscreen() {
   if (elem.requestFullscreen) {
@@ -192,4 +196,21 @@ function animateNextQuestion() {
     card.classList.remove("show");
   });
   cardItems[questionsShow].classList.add("show");
+}
+
+function startTimer() {
+  if (!isRunning) {
+    timerInterval = setInterval(function () {
+      theTimer++;
+      console.log("the timer is work....");
+      console.log(theTimer);
+    }, 1000);
+    isRunning = true;
+  }
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  console.log("the timer is stopped....");
+  isRunning = false;
 }
