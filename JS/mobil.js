@@ -15,7 +15,7 @@ const successModal = document.querySelector(".success-wrapper");
 const arrows = document.querySelectorAll(".game .body .arrow");
 const pauseButton = document.querySelector(".game .pause.icon");
 const scoreItem = document.querySelector(".scoreItem .items");
-let answers = 0;
+
 
 const iconsArr = [...arrows, pauseButton];
 
@@ -46,7 +46,7 @@ infoIcon.addEventListener("click", () => {
 scoreElements();
 const scoreSpans = document.querySelectorAll(".scoreItem .items .part");
 
-playButton.addEventListener('click' , ()=>{
+playButton.addEventListener('touchstart' , ()=>{
   console.log("start");
   openFullscreen();
   document.querySelector("#start-audio").play();
@@ -68,7 +68,7 @@ playButton.addEventListener('click' , ()=>{
 }) 
 })
 
-pauseButton.addEventListener("click", () => {
+pauseButton.addEventListener("touchstart", () => {
   console.log("paused");
   const hiddenIcon = pauseButton.querySelector("i.hide");
   const shownIcon = pauseButton.querySelector("i:not(.hide)");
@@ -83,29 +83,7 @@ pauseButton.addEventListener("click", () => {
 });
 cardsText.forEach((card) => {
   
-  card.addEventListener("click", (e) => {
-    //update value 
-    answers++;
-
-    var xhr = new XMLHttpRequest();
-
-
-    xhr.open('POST', '/update-database', true);
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.send(JSON.stringify({ newValue: answers }));
-
-    // تحديد ماذا يحدث عند استلام الرد من الخادم
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log('تم تحديث البيانات بنجاح', xhr.responseText);
-            } else {
-                console.error('حدث خطأ أثناء تحديث البيانات');
-            }
-        }
-    };
+  card.addEventListener("touchstart", (e) => {
     console.log("card  clicked");
     //CHECK ANSWERS
      var question_by_id = document.getElementById(
@@ -270,23 +248,3 @@ function scoreElements(){
     scoreItem.appendChild(span);
   }
 }
-
-
-function loadScript(src){
-  var script = document.querySelector(".script");
-  console.log(script);
-  script.src = src;
-  script.async = true;
-  document.head.appendChild(script);
-}
-
-function checkScript(){
-  if('ontouchstart' in window){
-    loadScript('./JS/mobil.js');
-    console.log("mobil");
-  }else{
-    loadScript('./JS/script.js');
-    console.log('computer');
-  }
-}
-checkScript();

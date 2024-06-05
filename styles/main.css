@@ -219,6 +219,8 @@ a {
   background-color: #fff;
   border-radius: 0.625rem 0 0 0.625rem;
   box-shadow: 0 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
 }
 .game .head .scoreWrapper .scoreItem::before {
   content: "";
@@ -230,6 +232,29 @@ a {
   z-index: 9;
   background-color: rgb(18, 171, 15);
   border-radius: inherit;
+}
+.game .head .scoreWrapper .scoreItem .items {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 9;
+  border-radius: inherit;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.game .head .scoreWrapper .scoreItem .items span {
+  height: 100%;
+  z-index: 9;
+}
+.game .head .scoreWrapper .scoreItem .items span.true {
+  background-color: rgb(18, 171, 15);
+}
+.game .head .scoreWrapper .scoreItem .items span.false {
+  background-color: rgb(212, 25, 25);
 }
 .game .head .scoreWrapper .scoreItem .score {
   position: relative;
@@ -243,26 +268,26 @@ a {
   width: 100%;
   transform-origin: left top;
 }
-.game .homepage.hide {
-  animation-name: scaleDown;
-  animation-duration: 0.7s;
-  animation-iteration-count: 1;
-}
 .game .homepage .title-image {
   width: 80%;
-  height: 70%;
+  height: 75%;
   left: 15%;
-  top: 10%;
+  top: -15%;
   position: relative;
 }
-@media (min-width: 320px) {
+@media (max-width: 768px) {
   .game .homepage .title-image {
-    top: 14%;
+    top: -22px;
   }
 }
-@media (min-width: 576px) {
+@media (max-width: 992px) {
   .game .homepage .title-image {
-    top: 5%;
+    top: -14%;
+  }
+}
+@media (min-width: 992px) {
+  .game .homepage .title-image {
+    top: -28%;
   }
 }
 .game .homepage .play {
