@@ -81,6 +81,7 @@ pauseButton.addEventListener("click", () => {
     startTimer();
   }
 });
+
 cardsText.forEach((card) => {
   
   card.addEventListener("click", (e) => {
